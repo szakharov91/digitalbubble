@@ -11,10 +11,20 @@ let common_config = {
 
 let conf = {
     prod: {
-        port: args.port || 3000
+        port: args.port || 3000,
+        speed_index: 10,
+        PWIDTH: 1920,
+        PHEIGHT: 1080,
+        CreateBubbleInterval: 100,
+        CreateBubbleCoefficient: 5,
     },
     test: {
-        port: args.port || 3031
+        port: args.port || 3031,
+        speed_index: 3,
+        PWIDTH: 1920,
+        PHEIGHT: 1080,
+        CreateBubbleInterval: 500,
+        CreateBubbleCoefficient: 2,
     }
 };
 
