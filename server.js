@@ -33,7 +33,8 @@ netIO.sockets.on('connection', (socket) => {
     });
 });
 
-
 let SocketList = {};
 let PlayersList = {};
+
+GameEntity
 
