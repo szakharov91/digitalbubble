@@ -8,8 +8,16 @@ socket.on('sendGameConfigToClient', function (config) {
     configuration = config;
 });
 
-canvas.width = WIDTH = document.documentElement.clientWidth;
-canvas.height = HEIGHT = document.documentElement.clientHeight;
+let ResizeCanvas = function () {
+    canvas.width = WIDTH = document.documentElement.clientWidth;
+    canvas.height = HEIGHT = document.documentElement.clientHeight;
+};
+
+ResizeCanvas();
+
+window.onresize = function () {
+    ResizeCanvas();
+};
 
 socket.on('updatePositions', function (data) {
     ctx.clearRect(0, 0, configuration.PWidth, configuration.PHeight);
@@ -34,7 +42,7 @@ socket.on('updatePositions', function (data) {
         ctx.closePath();
     }
 
-    for(let i = 0; i < data['players'].length; i++) {
+    for (let i = 0; i < data['players'].length; i++) {
         ctx.beginPath();
         ctx.arc(data['players'][i].x, data['players'][i].y, 40, 0, 2 * Math.PI, false);
         ctx.fillStyle = data['players'][i].color;
@@ -61,11 +69,11 @@ canvas.onmousemove = function (e) {
     socket.emit('PlayerMove', {x: mouseX, y: mouseY});
 };
 
-canvas.addEventListener('contextmenu', function(evt) {
+canvas.addEventListener('contextmenu', function (evt) {
     evt.preventDefault();
 });
 
-    canvas.onclick = function (e) {
+canvas.onclick = function (e) {
     socket.emit('PlayerOnClick', {x: e.clientX, y: e.clientY});
 };
 

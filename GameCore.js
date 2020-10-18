@@ -36,7 +36,7 @@ module.exports = GameCore = {
 
         dist = Math.sqrt(Math.pow(xDirection, 2) + Math.pow(yDirection, 2));
 
-        return (dist <= sum);
+        return (dist < sum);
     },
 
     changeDirectionFlow(circle1, circle2) {

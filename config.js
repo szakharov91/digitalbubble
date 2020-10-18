@@ -23,7 +23,7 @@ let conf = {
         speed_index: 3,
         PWIDTH: 1920,
         PHEIGHT: 1080,
-        CreateBubbleInterval: 500,
+        CreateBubbleInterval: 200,
         CreateBubbleCoefficient: 3,
     }
 };

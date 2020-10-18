@@ -9,6 +9,24 @@ let GameCore = require('./GameCore');
 let Player = require('./Player');
 let CircleDigit = require('./CircleDigit');
 
+// Config public path of files css,js,html
+let publicPath = path.resolve(__dirname, 'src');
+app.use(express.static(publicPath));
+
+// Main route of app
+app.get('/', function (req, res) {
+    res.sendFile('index.html', {root: publicPath});
+});
+
+app.get('*', function (req, res) {
+    res.sendFile('404.html', {root: publicPath});
+});
+
+// Create and starting web server
+http.listen(config.port, function () {
+    console.log('Server running on *:' + config.port);
+});
+
 const PLAYER_RADIUS = 40;
 
 GameCore.createRealm();
@@ -16,8 +34,7 @@ GameCore.createRealm();
 Helper.getCounterValue = function () {
     let min = (GameCore.PlayerCount !== 0) ? GameCore.getMinimalLevel() : 1;
     let max = (GameCore.PlayerCount !== 0) ? GameCore.getMaximumLevel() : 10;
-
-    let result = Helper.getRandomInt(min, (max + 10));
+    let result = Helper.getRandomInt(min - 1, (max + 10));
 
     return result;
 };
@@ -25,16 +42,11 @@ Helper.getCounterValue = function () {
 GameCore.getMinimalLevel = function () {
     let arr = Object.values(GameCore.PlayerList);
     if (arr.length <= 1) {
-        if (arr[0].counter !== 1) {
-            return arr[0].counter - (arr[0].counter - 5);
-        } else return 1;
+        return arr[0].counter
     }
     return Math.min.apply(Math, arr.map(function (o) {
         return o.counter;
-    }))
-    // arr.reduce((a, b) => {
-    //     return Math.min(a.counter, b.counter);
-    // });
+    }));
 };
 
 GameCore.getMaximumLevel = function () {
@@ -46,17 +58,14 @@ GameCore.getMaximumLevel = function () {
 
     return Math.max.apply(Math, arr.map(function (o) {
         return o.counter;
-    }))
-    // arr.reduce((a, b) => {
-    //     return Math.max(a.counter, b.counter);
-    // });
+    }));
 };
 
 GameCore.createObject = function (typeObj, objectEntity) {
     redrawCircle = function (obj) {
         for (let i in GameCore.CircleList) {
             let distance = GameCore.distance(obj.x, GameCore.CircleList[i].x, obj.y, GameCore.CircleList[i].y) - obj.radius * 2;
-            if (distance < 0) {
+            if (distance < 0 || distance <= obj.radius + GameCore.CircleList[i].radius) {
                 obj.x = Math.random() * config.PWIDTH;
                 obj.y = Math.random() * config.PHEIGHT;
                 redrawCircle(obj);
@@ -181,24 +190,6 @@ GameCore.onDisconnect = (socket) => {
 };
 
 let SocketList = {};
-
-// Config public path of files css,js,html
-let publicPath = path.resolve(__dirname, 'src');
-app.use(express.static(publicPath));
-
-// Main route of app
-app.get('/', function (req, res) {
-    res.sendFile('index.html', {root: publicPath});
-});
-
-app.get('*', function (req, res) {
-    res.sendFile('404.html', {root: publicPath});
-});
-
-// Create and starting web server
-http.listen(config.port, function () {
-    console.log('Server running on *:' + config.port);
-});
 
 // Handle basic socket events (connect/disconnect)
 netIO.sockets.on('connection', (socket) => {

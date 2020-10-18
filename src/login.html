@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Digital Bubble</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+    <script>
+        $(document).ready(function(){
+            var user;
+            $("#submit").click(function(){
+                user=$("#InputLogin").val();
+                $.post("/login",{user: user}, function(data){
+                    if(data==='yes') {
+
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<form id="FormLogin">
+    <label>Enter your name:</label>
+    <input type="text" id="InputLogin"/>
+    <button id="submit">PLAY!</button>
+</form>
+</body>
+</html>
