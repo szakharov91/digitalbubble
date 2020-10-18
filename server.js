@@ -53,19 +53,26 @@ GameCore.getMaximumLevel = function () {
 };
 
 GameCore.createObject = function (typeObj, objectEntity) {
+    redrawCircle = function (obj) {
+        for (let i in GameCore.CircleList) {
+            let distance = GameCore.distance(obj.x, GameCore.CircleList[i].x, obj.y, GameCore.CircleList[i].y) - obj.radius * 2;
+            if (distance < 0) {
+                obj.x = Math.random() * config.PWIDTH;
+                obj.y = Math.random() * config.PHEIGHT;
+                redrawCircle(obj);
+            }
+        }
+
+        return obj;
+    };
     switch (typeObj) {
         case 'CircleDigit':
             let xCoord = Helper.getRandomInt(0, config.PWIDTH);
             let yCoord = Helper.getRandomInt(0, config.PHEIGHT);
             let obj = new CircleDigit(Math.random() * 360, xCoord, yCoord);
-            let i = 0;
-            while (i < GameCore.CircleList.length) {
-                if (GameCore.collideCircle(obj, GameCore.CircleList[i])) {
-                    obj.x = Helper.getRandomInt(0, config.PWIDTH);
-                    obj.y = Helper.getRandomInt(0, config.PHEIGHT);
-                }
-                i++;
-            }
+
+            redrawCircle(obj);
+
             GameCore.CircleList[obj.id] = obj;
             break;
         case 'PlayerObject':
@@ -119,6 +126,10 @@ GameCore.updateCircles = function () {
         }
     }
     return pack;
+};
+
+GameCore.distance = (x1, x2, y1, y2) => {
+    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 };
 
 GameCore.checkPlayerClick = (playerId, xCoord, yCoord) => {
