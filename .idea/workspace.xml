@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62324c61-4034-47a0-bebb-4939e420d7af" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Player.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CircleDigit.js" beforeDir="false" afterPath="$PROJECT_DIR$/CircleDigit.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameCore.js" beforeDir="false" afterPath="$PROJECT_DIR$/GameCore.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers.js" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/client.js" afterDir="false" />
     </list>
@@ -90,7 +86,7 @@
       <updated>1602950887241</updated>
       <workItem from="1602950888536" duration="4441000" />
       <workItem from="1602955345670" duration="6581000" />
-      <workItem from="1602962396004" duration="26171000" />
+      <workItem from="1602962396004" duration="29038000" />
     </task>
     <task id="LOCAL-00001" summary="first init commit">
       <created>1602961208110</created>
@@ -106,7 +102,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602972503548</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Adding multiplayer and some parameters realized like config options (coefficient of speed, coef generation bubble ...etc)">
+      <created>1603028514340</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1603028514340</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -131,6 +134,7 @@
     </ignored-roots>
     <MESSAGE value="first init commit" />
     <MESSAGE value="Adding new mechanics of generation bubble and send it to client for rendering" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding new mechanics of generation bubble and send it to client for rendering" />
+    <MESSAGE value="Adding multiplayer and some parameters realized like config options (coefficient of speed, coef generation bubble ...etc)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding multiplayer and some parameters realized like config options (coefficient of speed, coef generation bubble ...etc)" />
   </component>
 </project>

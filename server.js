@@ -17,29 +17,39 @@ Helper.getCounterValue = function () {
     let min = (GameCore.PlayerCount !== 0) ? GameCore.getMinimalLevel() : 1;
     let max = (GameCore.PlayerCount !== 0) ? GameCore.getMaximumLevel() : 10;
 
-    return Helper.getRandomInt(min, (max + 10));
+    let result = Helper.getRandomInt(min, (max + 10));
+
+    return result;
 };
 
 GameCore.getMinimalLevel = function () {
     let arr = Object.values(GameCore.PlayerList);
     if (arr.length <= 1) {
-        return 1;
+        if (arr[0].counter !== 1) {
+            return arr[0].counter - (arr[0].counter - 5);
+        } else return 1;
     }
-    arr.reduce((a, b) => {
-        console.log(a.counter);
-        return Math.min(a.counter, b.counter);
-    });
+    return Math.min.apply(Math, arr.map(function (o) {
+        return o.counter;
+    }))
+    // arr.reduce((a, b) => {
+    //     return Math.min(a.counter, b.counter);
+    // });
 };
 
 GameCore.getMaximumLevel = function () {
     let arr = Object.values(GameCore.PlayerList);
 
     if (arr.length <= 1) {
-        return 10;
+        return arr[0].counter;
     }
-    arr.reduce((a, b) => {
-        return Math.max(a.counter, b.counter);
-    });
+
+    return Math.max.apply(Math, arr.map(function (o) {
+        return o.counter;
+    }))
+    // arr.reduce((a, b) => {
+    //     return Math.max(a.counter, b.counter);
+    // });
 };
 
 GameCore.createObject = function (typeObj, objectEntity) {
@@ -64,6 +74,24 @@ GameCore.createObject = function (typeObj, objectEntity) {
             GameCore.PlayerCount++;
             break;
     }
+};
+
+GameCore.packedPlayers = function () {
+    let pack = [];
+    for (let i in GameCore.PlayerList) {
+        if (GameCore.PlayerList.hasOwnProperty(i)) {
+
+            pack.push({
+                color: GameCore.PlayerList[i].color,
+                x: GameCore.PlayerList[i].x,
+                y: GameCore.PlayerList[i].y,
+                id: GameCore.PlayerList[i].id,
+                counter: GameCore.PlayerList[i].counter
+            });
+        }
+    }
+
+    return pack;
 };
 
 GameCore.updateCircles = function () {

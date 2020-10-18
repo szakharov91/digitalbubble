@@ -61,7 +61,11 @@ canvas.onmousemove = function (e) {
     socket.emit('PlayerMove', {x: mouseX, y: mouseY});
 };
 
-canvas.onclick = function (e) {
+canvas.addEventListener('contextmenu', function(evt) {
+    evt.preventDefault();
+});
+
+    canvas.onclick = function (e) {
     socket.emit('PlayerOnClick', {x: e.clientX, y: e.clientY});
 };
 

@@ -10,24 +10,6 @@ module.exports = GameCore = {
 
     },
 
-    packedPlayers: function () {
-        let pack = [];
-        for (let i in this.PlayerList) {
-            if (this.PlayerList.hasOwnProperty(i)) {
-
-                pack.push({
-                    color: this.PlayerList[i].color,
-                    x: this.PlayerList[i].x,
-                    y: this.PlayerList[i].y,
-                    id: this.PlayerList[i].id,
-                    counter: this.PlayerList[i].counter
-                });
-            }
-        }
-
-        return pack;
-    },
-
     moveCircles: () => {
         for (let i in this.CircleList) {
             if (this.CircleList.hasOwnProperty(i)) {
