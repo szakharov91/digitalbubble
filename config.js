@@ -24,7 +24,7 @@ let conf = {
         PWIDTH: 1920,
         PHEIGHT: 1080,
         CreateBubbleInterval: 500,
-        CreateBubbleCoefficient: 2,
+        CreateBubbleCoefficient: 3,
     }
 };
 

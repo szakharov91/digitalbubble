@@ -1,20 +1,31 @@
 module.exports = GameCore = {
+    PlayerCount: 0,
     PlayerList: {},
     CircleList: [],
     createRealm: () => {
 
     },
 
-    onConnect: (socket) => {
-
-    },
-
-    onDisconnect: (socket) => {
-        delete this.PlayerList[socket.id];
-    },
-
     createObject: () => {
 
+    },
+
+    packedPlayers: function () {
+        let pack = [];
+        for (let i in this.PlayerList) {
+            if (this.PlayerList.hasOwnProperty(i)) {
+
+                pack.push({
+                    color: this.PlayerList[i].color,
+                    x: this.PlayerList[i].x,
+                    y: this.PlayerList[i].y,
+                    id: this.PlayerList[i].id,
+                    counter: this.PlayerList[i].counter
+                });
+            }
+        }
+
+        return pack;
     },
 
     moveCircles: () => {
