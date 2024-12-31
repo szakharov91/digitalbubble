@@ -13,12 +13,9 @@
  */
 
 var Buffer = require('safe-buffer').Buffer
-var contentDisposition = require('content-disposition');
 var contentType = require('content-type');
-var deprecate = require('depd')('express');
-var flatten = require('array-flatten');
-var mime = require('send').mime;
 var etag = require('etag');
+var mime = require('mime-types')
 var proxyaddr = require('proxy-addr');
 var qs = require('qs');
 var querystring = require('querystring');
@@ -46,31 +43,6 @@ exports.etag = createETagGenerator({ weak: false })
 exports.wetag = createETagGenerator({ weak: true })
 
 /**
- * Check if `path` looks absolute.
- *
- * @param {String} path
- * @return {Boolean}
- * @api private
- */
-
-exports.isAbsolute = function(path){
-  if ('/' === path[0]) return true;
-  if (':' === path[1] && ('\\' === path[2] || '/' === path[2])) return true; // Windows device path
-  if ('\\\\' === path.substring(0, 2)) return true; // Microsoft Azure absolute path
-};
-
-/**
- * Flatten the given `arr`.
- *
- * @param {Array} arr
- * @return {Array}
- * @api private
- */
-
-exports.flatten = deprecate.function(flatten,
-  'utils.flatten: use array-flatten npm module instead');
-
-/**
  * Normalize the given `type`, for example "html" becomes "text/html".
  *
  * @param {String} type
@@ -81,7 +53,7 @@ exports.flatten = deprecate.function(flatten,
 exports.normalizeType = function(type){
   return ~type.indexOf('/')
     ? acceptParams(type)
-    : { value: mime.lookup(type), params: {} };
+    : { value: (mime.lookup(type) || 'application/octet-stream'), params: {} }
 };
 
 /**
@@ -103,30 +75,17 @@ exports.normalizeTypes = function(types){
 };
 
 /**
- * Generate Content-Disposition header appropriate for the filename.
- * non-ascii filenames are urlencoded and a filename* parameter is added
- *
- * @param {String} filename
- * @return {String}
- * @api private
- */
-
-exports.contentDisposition = deprecate.function(contentDisposition,
-  'utils.contentDisposition: use content-disposition npm module instead');
-
-/**
  * Parse accept params `str` returning an
  * object with `.value`, `.quality` and `.params`.
- * also includes `.originalIndex` for stable sorting
  *
  * @param {String} str
  * @return {Object}
  * @api private
  */
 
-function acceptParams(str, index) {
+function acceptParams (str) {
   var parts = str.split(/ *; */);
-  var ret = { value: parts[0], quality: 1, params: {}, originalIndex: index };
+  var ret = { value: parts[0], quality: 1, params: {} }
 
   for (var i = 1; i < parts.length; ++i) {
     var pms = parts[i].split(/ *= */);
@@ -157,15 +116,13 @@ exports.compileETag = function(val) {
 
   switch (val) {
     case true:
+    case 'weak':
       fn = exports.wetag;
       break;
     case false:
       break;
     case 'strong':
       fn = exports.etag;
-      break;
-    case 'weak':
-      fn = exports.wetag;
       break;
     default:
       throw new TypeError('unknown value for etag function: ' + val);
@@ -191,16 +148,13 @@ exports.compileQueryParser = function compileQueryParser(val) {
 
   switch (val) {
     case true:
+    case 'simple':
       fn = querystring.parse;
       break;
     case false:
-      fn = newObject;
       break;
     case 'extended':
       fn = parseExtendedQueryString;
-      break;
-    case 'simple':
-      fn = querystring.parse;
       break;
     default:
       throw new TypeError('unknown value for query parser function: ' + val);
@@ -232,7 +186,8 @@ exports.compileTrust = function(val) {
 
   if (typeof val === 'string') {
     // Support comma-separated values
-    val = val.split(/ *, */);
+    val = val.split(',')
+      .map(function (v) { return v.trim() })
   }
 
   return proxyaddr.compile(val || []);
@@ -284,6 +239,7 @@ function createETagGenerator (options) {
 /**
  * Parse an extended query string with qs.
  *
+ * @param {String} str
  * @return {Object}
  * @private
  */
@@ -292,15 +248,4 @@ function parseExtendedQueryString(str) {
   return qs.parse(str, {
     allowPrototypes: true
   });
-}
-
-/**
- * Return new empty object.
- *
- * @return {Object}
- * @api private
- */
-
-function newObject() {
-  return {};
 }
